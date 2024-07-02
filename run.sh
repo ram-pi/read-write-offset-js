@@ -4,4 +4,4 @@ set -a
 source .env.local
 set +a
 
-node send_to_dlq.js
+node --no-warnings send_to_dlq.js

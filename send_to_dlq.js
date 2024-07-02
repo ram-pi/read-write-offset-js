@@ -50,13 +50,19 @@ async function consumerStart() {
                 value: message.value.toString(),
                 key: message.key.toString(),
                 headers: message.headers,
+                offset: message.offset,
             });
 
+            console.log("Sending message to DLQ");
             await sendMessage(message.value);
+
+            console.log("Pausing consumer");
+            consumer.pause([{ topic: process.env.TOPIC }]);
+
+            console.log("Starting disconnect");
+            consumer.disconnect().then(() => console.log("Ending disconnect"));
         },
     });
-
-    await consumer.disconnect();
 }
 
 consumerStart();
